@@ -1,0 +1,20 @@
+{
+  "name": "twitch-chat-overlay",
+  "version": "0.0.1",
+  "description": "Twitch chat for your overlay",
+  "main": "app.coffee",
+  "scripts": {
+    "start": "./node_modules/coffee-script/bin/coffee app.coffee",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Michael Owens",
+  "license": "ISC",
+  "dependencies": {
+    "coffee-script": "^1.9.3",
+    "connect": "^3.4.0",
+    "connect-assets": "^4.8.0",
+    "serve-static": "^1.10.0",
+    "socket.io": "^1.3.6",
+    "twitch-irc": "^1.2.7"
+  }
+}

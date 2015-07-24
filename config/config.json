@@ -1,0 +1,9 @@
+{
+    "username": "xikeon",
+    "theme": "dark",
+    "notify": {
+        "chat": true,
+        "subscription": false,
+        "subanniversary": false
+    }
+}
