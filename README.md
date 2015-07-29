@@ -24,3 +24,8 @@ Then open up http://localhost:1337 in your browser, and if all is well you shoul
 Once you've got the CLR plugin installed, you can add it to your scene. In a popup it should ask for a few settings. Set the URL to `http://localhost:1337`. For the size you can change it to whatever you wish the size to be.
 
 **Make sure you start the app (`coffee app.coffee`) before enabling the browser on your scene. If it doesn't show up try to re-enable the browser on your scene.**
+
+
+## Useless Preview
+
+![preview](preview.png)
