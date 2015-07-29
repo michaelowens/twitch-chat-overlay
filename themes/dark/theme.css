@@ -53,6 +53,12 @@ ul {
     margin-bottom: 10px;
 }
 
+.messages li .time {
+    position: absolute;
+    right: 60px;
+    top: 13px;
+}
+
 .messages li .msg {
     font-size: 20px;
     margin-right: 60px;

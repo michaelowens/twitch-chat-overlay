@@ -42,11 +42,17 @@ replaceEmotes = (msg) ->
 
 urlToImage = (url) -> '<img src="' + url + '">'
 
+paddedTime = (str) -> if str.length < 2 then '0' + str else str
+
 appendMessage = (data) ->
     msg = replaceEmotes data.message
-
+    now = new Date
+    h = paddedTime now.getHours()
+    m = paddedTime now.getMinutes()
+    time = h + ':' + m
     template = """
         <div class="name">#{data.user.username}</div>
+        <div class="time">#{time}</div>
         <div class="msg">#{msg}</div>
     """
 
