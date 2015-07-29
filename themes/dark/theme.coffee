@@ -7,6 +7,8 @@ fetch 'config.json'
 messageQueue = []
 allEmotes = {}
 
+# This emote logic should really be moved to app.coffee
+# would suck having to do this on every theme
 loadEmotes = (config) ->
     if config.emotes
         fetch '//twitchemotes.com/global.json'
