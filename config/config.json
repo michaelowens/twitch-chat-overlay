@@ -4,6 +4,9 @@
     "notify": {
         "chat": true,
         "subscription": false,
-        "subanniversary": false
-    }
+        "subanniversary": false,
+        "hosted": false
+    },
+    "emotes": true,
+    "subemotes": false
 }

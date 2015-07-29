@@ -60,6 +60,13 @@ ul {
     overflow: hidden;
 }
 
+.messages li .msg img {
+    display: inline-block;
+    padding-top: 5px;
+    margin: -5px 0;
+    vertical-align: baseline;
+}
+
 .messages .server {
     display: none;
 }

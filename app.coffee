@@ -5,7 +5,7 @@ app = require('connect')()
 server = require('http').createServer(app)
 io = require('socket.io')(server, path: '/socket.io')
 serveStatic = require 'serve-static'
-twitchIrc = require 'twitch-irc'
+twitchIrc = require 'tmi.js'
 coffee = require 'coffee-script'
 config = require './config/config'
 
@@ -13,6 +13,8 @@ config = require './config/config'
 # Twitch
 ##
 client = new twitchIrc.client
+    options:
+        debug: true
     channels: ['#' + config.username.toLowerCase()]
     connection:
         reconnect: true
@@ -21,13 +23,19 @@ client = new twitchIrc.client
 client.connect()
 
 client.addListener 'chat', (channel, user, message) ->
-    if config.notify.chat then io.emit 'message', {user: user, message: message}
+    if config.notify.chat then io.emit 'message', {user: user, message: message, action: false}
+
+client.addListener 'action', (channel, user, message) ->
+    if config.notify.chat then io.emit 'message', {user: user, message: message, action: true}
 
 client.addListener 'subscription', (channel, user) ->
     if config.notify.subscription then io.emit 'subscription', {user: user} 
 
 client.addListener 'subanniversary', (channel, user, months) ->
     if config.notify.subanniversary then io.emit 'subanniversary', {user: user, months: months}
+
+client.addListener 'hosted', (channel, user, viewers) ->
+    if config.notify.hosted then io.emit 'hosted', {user: user, viewers: viewers}
 
 
 ##
@@ -42,7 +50,7 @@ app
         if ext is 'coffee'
             file = path.join themePath, filePath
             fs.readFile file, 'utf8', (err, data) ->
-                res.write coffee.compile data
+                res.write coffee.compile data, bare: true
                 res.end()
         else
             next()
