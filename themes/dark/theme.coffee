@@ -18,6 +18,11 @@ loadEmotes = (config) ->
             .then (response) -> response.json()
             .then (emotes) -> parseTwitchSubEmotes emotes
 
+    if config.bttvemotes
+        fetch '//api.betterttv.net/2/emotes'
+            .then (response) -> response.json()
+            .then (emotes) -> parseBTTVEmotes emotes
+
 start = (config) ->
     socket = io 'ws://localhost:' + (config.port || 1337), transports: ['websocket', 'polling']
 
@@ -32,11 +37,23 @@ parseTwitchSubEmotes = (emotes) ->
         Object.keys(emotes[k].emotes).forEach (k2) ->
             allEmotes[k2] = emotes[k].emotes[k2]
 
+parseBTTVEmotes = (data) ->
+    data.emotes.forEach (v) ->
+        allEmotes[v.code] = parseBTTVURL data.urlTemplate, v
+
+parseBTTVURL = (tpl, emote) ->
+    tpl
+        .replace /{{id}}/, emote.id
+        .replace /{{image}}/, '1x'
+
+# http://stackoverflow.com/questions/3446170/escape-string-for-use-in-javascript-regex
+escapeRegExp = (str) -> str.replace /[\-\[\]\/\{\}\(\)\*\+\?\.\\\^\$\|]/g, '\\$&'
+
 replaceEmotes = (msg) ->
     return msg if not allEmotes
 
     for emote of allEmotes
-        msg = msg.replace new RegExp('\\b' + emote + '\\b', 'g'), urlToImage(allEmotes[emote])
+        msg = msg.replace new RegExp('\\b' + escapeRegExp(emote) + '\\b', 'g'), urlToImage(allEmotes[emote])
 
     return msg # I don't want this
 

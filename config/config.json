@@ -8,5 +8,6 @@
         "hosted": false
     },
     "emotes": true,
-    "subemotes": false
+    "subemotes": false,
+    "bttvemotes": true
 }
