@@ -11,19 +11,19 @@ allEmotes = {}
 # would suck having to do this on every theme
 loadEmotes = (config) ->
     if config.emotes
-        fetch '//twitchemotes.com/global.json'
-            .then (response) -> response.json()
-            .then (emotes) -> parseTwitchEmotes emotes
+        fetchEmoteUrl '//twitchemotes.com/global.json', parseTwitchEmotes
 
     if config.subemotes
-        fetch '//twitchemotes.com/subscriber.json'
-            .then (response) -> response.json()
-            .then (emotes) -> parseTwitchSubEmotes emotes
+        fetchEmoteUrl '//twitchemotes.com/subscriber.json', parseTwitchSubEmotes
 
     if config.bttvemotes
-        fetch '//api.betterttv.net/2/emotes'
-            .then (response) -> response.json()
-            .then (emotes) -> parseBTTVEmotes emotes
+        fetchEmoteUrl 'https://api.betterttv.net/2/emotes', parseBTTVEmotes
+        fetchEmoteUrl 'https://api.betterttv.net/2/channels/' + config.username, parseBTTVEmotes
+
+fetchEmoteUrl = (url, cb) ->
+    fetch url
+        .then (response) -> response.json()
+        .then (emotes) -> cb.call null, emotes
 
 start = (config) ->
     socket = io 'ws://localhost:' + (config.port || 1337), transports: ['websocket', 'polling']
@@ -40,8 +40,8 @@ parseTwitchSubEmotes = (emotes) ->
             allEmotes[k2] = emotes[k].emotes[k2]
 
 parseBTTVEmotes = (data) ->
-    data.emotes.forEach (v) ->
-        allEmotes[v.code] = parseBTTVURL data.urlTemplate, v
+    data.emotes.forEach (emote) ->
+        allEmotes[emote.code] = parseBTTVURL data.urlTemplate, emote
 
 parseBTTVURL = (tpl, emote) ->
     tpl
@@ -49,13 +49,15 @@ parseBTTVURL = (tpl, emote) ->
         .replace /{{image}}/, '1x'
 
 # http://stackoverflow.com/questions/3446170/escape-string-for-use-in-javascript-regex
-escapeRegExp = (str) -> str.replace /[\-\[\]\/\{\}\(\)\*\+\?\.\\\^\$\|]/g, '\\$&'
+escapeRegExp = (str) -> str.replace /[-\/\\^$*+?.()|[\]{}]/g, '\\$&'
 
 replaceEmotes = (msg) ->
     return msg if not allEmotes
 
     for emote of allEmotes
-        msg = msg.replace new RegExp('\\b' + escapeRegExp(emote) + '\\b', 'g'), urlToImage(allEmotes[emote])
+        # if emote is '(ditto)' then debugger
+        console.log emote
+        msg = msg.replace new RegExp('(?!\S)' + escapeRegExp(emote) + '(?!\S)', 'g'), urlToImage(allEmotes[emote])
 
     return msg # I don't want this
 
