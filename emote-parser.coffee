@@ -2,7 +2,8 @@ https = require 'https'
 
 allEmotes = []
 
-exports.parse = (msg) -> replaceEmotes msg
+exports.parse = (msg) ->
+    replaceEmotes msg.split ' '
 
 exports.load = (config) ->
     if config.emotes
@@ -24,7 +25,9 @@ fetchEmotes = (url, callback) ->
 
         response.on 'end', ->
             # great error handling
-            callback JSON.parse body
+            try
+                callback JSON.parse body
+            catch nothing
 
 parseTwitchEmotes = (emotes) ->
     Object.keys(emotes).forEach (k) -> allEmotes.push code: k, url: emotes[k].url
@@ -46,11 +49,11 @@ parseBTTVURL = (tpl, emote) ->
 # http://stackoverflow.com/questions/3446170/escape-string-for-use-in-javascript-regex
 escapeRegExp = (str) -> str.replace /[-\/\\^$*+?.()|[\]{}]/g, '\\$&'
 
-urlToImage = (url) -> '<img src="' + url + '">'
-
 reducer = (previous, current) ->
-    previous.replace new RegExp('\\b' + escapeRegExp(current.code) + '\\b', 'g'), urlToImage(current.url)
+    previous.replace new RegExp('^' + escapeRegExp(current.code) + '$', 'g'), '<img src="' + current.url + '">'
 
-replaceEmotes = (msg) ->
+replaceEmotes = (words) ->
     return msg if not allEmotes
-    allEmotes.reduce reducer, msg
+
+    replacedWords = words.map (word) -> allEmotes.reduce reducer, word
+    replacedWords.join ' '
