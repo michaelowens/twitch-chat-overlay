@@ -12,6 +12,13 @@ emotes = require './emote-parser'
 
 emotes.load config
 
+escapeHTML = (str) ->
+    (str.replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/\//g, '&#x2F;')
+        .replace(/\`/g, '&#96;'))
+
 ##
 # Twitch
 ##
@@ -26,10 +33,10 @@ client = new twitchIrc.client
 client.connect()
 
 client.addListener 'chat', (channel, user, message) ->
-    if config.notify.chat then io.emit 'message', {user: user, message: emotes.parse(message), action: false}
+    if config.notify.chat then io.emit 'message', {user: user, message: emotes.parse(escapeHTML(message)), action: false}
 
 client.addListener 'action', (channel, user, message) ->
-    if config.notify.chat then io.emit 'message', {user: user, message: emotes.parse(message), action: true}
+    if config.notify.chat then io.emit 'message', {user: user, message: emotes.parse(escapeHTML(message)), action: true}
 
 client.addListener 'subscription', (channel, user) ->
     if config.notify.subscription then io.emit 'subscription', {user: user} 

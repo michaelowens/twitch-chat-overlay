@@ -49,7 +49,7 @@ escapeRegExp = (str) -> str.replace /[-\/\\^$*+?.()|[\]{}]/g, '\\$&'
 urlToImage = (url) -> '<img src="' + url + '">'
 
 reducer = (previous, current) ->
-    previous.replace new RegExp('(?!\S)' + escapeRegExp(current.code) + '(?!\S)', 'g'), urlToImage(current.url)
+    previous.replace new RegExp('\\b' + escapeRegExp(current.code) + '\\b', 'g'), urlToImage(current.url)
 
 replaceEmotes = (msg) ->
     return msg if not allEmotes
