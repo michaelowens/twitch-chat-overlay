@@ -9,5 +9,7 @@
     },
     "emotes": true,
     "subemotes": false,
-    "bttvemotes": true
+    "bttvemotes": true,
+
+    "maxmessages": 5
 }
