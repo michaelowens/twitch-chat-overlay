@@ -8,6 +8,9 @@ serveStatic = require 'serve-static'
 twitchIrc = require 'tmi.js'
 coffee = require 'coffee-script'
 config = require './config/config'
+emotes = require './emote-parser'
+
+emotes.load config
 
 ##
 # Twitch
@@ -23,10 +26,10 @@ client = new twitchIrc.client
 client.connect()
 
 client.addListener 'chat', (channel, user, message) ->
-    if config.notify.chat then io.emit 'message', {user: user, message: message, action: false}
+    if config.notify.chat then io.emit 'message', {user: user, message: emotes.parse(message), action: false}
 
 client.addListener 'action', (channel, user, message) ->
-    if config.notify.chat then io.emit 'message', {user: user, message: message, action: true}
+    if config.notify.chat then io.emit 'message', {user: user, message: emotes.parse(message), action: true}
 
 client.addListener 'subscription', (channel, user) ->
     if config.notify.subscription then io.emit 'subscription', {user: user} 
