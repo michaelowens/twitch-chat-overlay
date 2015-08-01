@@ -1,6 +1,6 @@
 https = require 'https'
 
-allEmotes = {}
+allEmotes = []
 
 exports.parse = (msg) -> replaceEmotes msg
 
@@ -27,16 +27,16 @@ fetchEmotes = (url, callback) ->
             callback JSON.parse body
 
 parseTwitchEmotes = (emotes) ->
-    Object.keys(emotes).forEach (k) -> allEmotes[k] = emotes[k].url
+    Object.keys(emotes).forEach (k) -> allEmotes.push code: k, url: emotes[k].url
 
 parseTwitchSubEmotes = (emotes) ->
     Object.keys(emotes).forEach (k) ->
         Object.keys(emotes[k].emotes).forEach (k2) ->
-            allEmotes[k2] = emotes[k].emotes[k2]
+            allEmotes.push code: k2, url: emotes[k].emotes[k2]
 
 parseBTTVEmotes = (data) ->
     data.emotes.forEach (emote) ->
-        allEmotes[emote.code] = parseBTTVURL data.urlTemplate, emote
+        allEmotes.push code: emote.code, url: parseBTTVURL(data.urlTemplate, emote) 
 
 parseBTTVURL = (tpl, emote) ->
     tpl
@@ -48,10 +48,9 @@ escapeRegExp = (str) -> str.replace /[-\/\\^$*+?.()|[\]{}]/g, '\\$&'
 
 urlToImage = (url) -> '<img src="' + url + '">'
 
+reducer = (previous, current) ->
+    previous.replace new RegExp('(?!\S)' + escapeRegExp(current.code) + '(?!\S)', 'g'), urlToImage(current.url)
+
 replaceEmotes = (msg) ->
     return msg if not allEmotes
-
-    for emote of allEmotes
-        msg = msg.replace new RegExp('(?!\S)' + escapeRegExp(emote) + '(?!\S)', 'g'), urlToImage(allEmotes[emote])
-
-    return msg # I don't want this
+    allEmotes.reduce reducer, msg
