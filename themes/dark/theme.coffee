@@ -14,8 +14,8 @@ paddedTime = (str) -> if str.length < 2 then '0' + str else str
 
 appendMessage = (data) ->
     now = new Date
-    h = paddedTime now.getHours()
-    m = paddedTime now.getMinutes()
+    h = paddedTime now.getHours().toString()
+    m = paddedTime now.getMinutes().toString()
     time = h + ':' + m
     template = """
         <div class="name">#{data.user.username}</div>

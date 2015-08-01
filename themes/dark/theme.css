@@ -73,10 +73,6 @@ ul {
     vertical-align: baseline;
 }
 
-.messages .server {
-    display: none;
-}
-
 @-webkit-keyframes fadeInOutSlideUp {
     0% {
         opacity: 0;
