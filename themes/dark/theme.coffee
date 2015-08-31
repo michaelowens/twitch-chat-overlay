@@ -5,7 +5,7 @@ fetch 'config.json'
     .then (config) -> start config
 
 start = (config) ->
-    socket = io 'ws://localhost:' + (config.port || 1337), transports: ['websocket', 'polling']
+    socket = io 'ws://' + document.domain + ':' + (config.port || 1337), transports: ['websocket', 'polling']
 
     socket.on 'message', (data) ->
         messageQueue.push data
