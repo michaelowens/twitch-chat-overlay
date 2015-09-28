@@ -14,6 +14,7 @@ window.getQueryVariable = (variable) ->
 allEmotes = []
 
 config = 
+    username: getQueryVariable('username')
     emotes: getQueryVariable('emotes') || true
     subemotes: getQueryVariable('subemotes') || false
     bttvemotes: getQueryVariable('bttvemotes') || false
