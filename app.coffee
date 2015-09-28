@@ -17,8 +17,11 @@ app
         if ext is 'coffee'
             file = path.join process.cwd(), filePath
             fs.readFile file, 'utf8', (err, data) ->
-                res.write coffee.compile data, bare: true
-                res.end()
+                if err
+                    next()
+                else
+                    res.write coffee.compile data, bare: true
+                    res.end()
         else
             next()
     )
