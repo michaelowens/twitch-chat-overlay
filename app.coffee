@@ -33,6 +33,7 @@ app
             res.end('Username not given.\n')
         else
             theme = query.theme || 'dark'
+            res.writeHeader(200, {"Content-Type": "text/html"});
             res.write(fs.readFileSync(path.join process.cwd(), 'themes', theme, 'index.html'))
             res.end()
     )
