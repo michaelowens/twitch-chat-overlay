@@ -3,70 +3,38 @@ url = require 'url'
 fs = require 'fs'
 app = require('connect')()
 server = require('http').createServer(app)
-io = require('socket.io')(server, path: '/socket.io')
 serveStatic = require 'serve-static'
-twitchIrc = require 'tmi.js'
 coffee = require 'coffee-script'
-config = require './config/config'
-emotes = require './emote-parser'
-
-emotes.load config
-
-escapeHTML = (str) ->
-    (str.replace(/&/g, '&amp;')
-        .replace(/</g, '&lt;')
-        .replace(/>/g, '&gt;')
-        .replace(/\//g, '&#x2F;')
-        .replace(/\`/g, '&#96;'))
-
-##
-# Twitch
-##
-client = new twitchIrc.client
-    options:
-        debug: true
-    channels: ['#' + config.username.toLowerCase()]
-    connection:
-        reconnect: true
-        retries: 3
-
-client.connect()
-
-client.addListener 'chat', (channel, user, message) ->
-    if config.notify.chat then io.emit 'message', {user: user, message: emotes.parse(escapeHTML(message)), action: false}
-
-client.addListener 'action', (channel, user, message) ->
-    if config.notify.chat then io.emit 'message', {user: user, message: emotes.parse(escapeHTML(message)), action: true}
-
-client.addListener 'subscription', (channel, user) ->
-    if config.notify.subscription then io.emit 'subscription', {user: user} 
-
-client.addListener 'subanniversary', (channel, user, months) ->
-    if config.notify.subanniversary then io.emit 'subanniversary', {user: user, months: months}
-
-client.addListener 'hosted', (channel, user, viewers) ->
-    if config.notify.hosted then io.emit 'hosted', {user: user, viewers: viewers}
-
 
 ##
 # Webserver
 ##
-themePath = path.join process.cwd(), 'themes', config.theme
 app
     .use((req, res, next) ->
         filePath = decodeURI(url.parse(req.url).pathname)
         ext = filePath.split('.').pop()
 
         if ext is 'coffee'
-            file = path.join themePath, filePath
+            file = path.join process.cwd(), filePath
             fs.readFile file, 'utf8', (err, data) ->
                 res.write coffee.compile data, bare: true
                 res.end()
         else
             next()
     )
-    .use(serveStatic(path.join process.cwd(), 'themes', config.theme))
-    .use(serveStatic(path.join process.cwd(), 'config'))
+    .use('/themes', serveStatic(path.join process.cwd(), 'themes'))
     .use(serveStatic(path.join process.cwd(), 'public'))
+    .use((req, res) ->
+        # https://stackoverflow.com/questions/19029386/node-js-http-get-request-params
+        parts = url.parse(req.url, true);
+        query = parts.query;
 
-server.listen config.port || 1337
+        if !query.username
+            res.end('Username not given.\n')
+        else
+            theme = query.theme || 'dark'
+            res.write(fs.readFileSync(path.join process.cwd(), 'themes', theme, 'index.html'))
+            res.end()
+    )
+
+server.listen process.env.PORT || 1337
