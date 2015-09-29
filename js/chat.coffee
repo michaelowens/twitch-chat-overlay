@@ -39,7 +39,7 @@ client.addListener 'subanniversary', (channel, user, months) ->
 
 client.addListener 'hosted', (channel, user, viewers) ->
     if config.notify.hosts
-        event = new CustomEvent('message', {'detail': {user: user, viewers: viewers}});
+        event = new CustomEvent('host', {'detail': {user: user, viewers: viewers}});
         document.dispatchEvent(event);
 
 client.addListener 'connected', (address, port) ->
