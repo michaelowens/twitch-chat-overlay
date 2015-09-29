@@ -41,3 +41,15 @@ client.addListener 'hosted', (channel, user, viewers) ->
     if config.notify.hosts
         event = new CustomEvent('message', {'detail': {user: user, viewers: viewers}});
         document.dispatchEvent(event);
+
+client.addListener 'connected', (address, port) ->
+    event = new CustomEvent('message', {'detail': {user: {username: 'Chat Overlay'}, message: 'Connected to twitch.tv servers!', action: false}});
+    document.dispatchEvent(event);
+
+client.addListener 'disconnected', (reason) ->
+    event = new CustomEvent('message', {'detail': {user: {username: 'Chat Overlay'}, message: 'You have been disconnected from twitch.tv. (Reason: ' + reason + ').', action: false}});
+    document.dispatchEvent(event);
+
+client.addListener 'join', (channel, username) ->
+    event = new CustomEvent('message', {'detail': {user: {username: 'Chat Overlay'}, message: 'Joined your channel chatroom (' + channel + ').', action: false}});
+    document.dispatchEvent(event);
