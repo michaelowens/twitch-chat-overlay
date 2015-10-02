@@ -50,6 +50,6 @@ client.addListener 'disconnected', (reason) ->
     event = new CustomEvent('message', {'detail': {user: {username: 'Chat Overlay'}, message: 'You have been disconnected from twitch.tv. (Reason: ' + reason + ').', action: false}});
     document.dispatchEvent(event);
 
-client.addListener 'join', (channel, username) ->
-    event = new CustomEvent('message', {'detail': {user: {username: 'Chat Overlay'}, message: 'Joined your channel chatroom (' + channel + ').', action: false}});
-    document.dispatchEvent(event);
+# client.addListener 'join', (channel, username) ->
+#     event = new CustomEvent('message', {'detail': {user: {username: 'Chat Overlay'}, message: 'Joined your channel chatroom (' + channel + ').', action: false}});
+#     document.dispatchEvent(event);
