@@ -1,3 +1,3 @@
 {
-	"ignore": ["themes/**/*"]
+	"ignore": ["themes/**/*", "js/*"]
 }
