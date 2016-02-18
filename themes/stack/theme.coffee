@@ -1,17 +1,7 @@
 messageQueue = []
-config = null
 
-fetch 'config.json'
-    .then (response) -> response.json()
-    .then (data) ->
-        config = data
-        start config
-
-start = (config) ->
-    socket = io 'ws://' + document.domain + ':' + (config.port || 1337), transports: ['websocket', 'polling']
-
-    socket.on 'message', (data) ->
-        messageQueue.push data
+document.addEventListener 'message', (data) ->
+    messageQueue.push data.detail # CustomEvents use the .detail field
 
 paddedTime = (str) -> if str.length < 2 then '0' + str else str
 

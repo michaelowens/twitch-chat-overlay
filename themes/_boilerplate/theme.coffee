@@ -1,20 +1,13 @@
-fetch 'config.json'
-    .then (response) -> response.json()
-    .then (config) -> start config
-
 messageQueue = []
 
-start = (config) ->
-    socket = io 'ws://' + document.domain + ':' + (config.port || 1337), transports: ['websocket', 'polling']
+document.addEventListener 'message', (data) ->
+    messageQueue.push data.detail # CustomEvents use the .detail field
 
-    socket.on 'message', (data) ->
-        messageQueue.push data
+document.addEventListener 'subscription', (data) ->
+    console.log data.user + ' just subscribed!'
 
-    socket.on 'subscription', (data) ->
-        console.log data.user + ' just subscribed!'
-
-    socket.on 'subanniversary', (data) ->
-        console.log data.user.username + ' subbed for ' + data.months + ' month' + (if data.months isnt 1 then 's' else '') + '!'
+document.addEventListener 'subanniversary', (data) ->
+    console.log data.user.username + ' subbed for ' + data.months + ' month' + (if data.months isnt 1 then 's' else '') + '!'
 
 appendMessage = (data) ->
     template = """
