@@ -1,0 +1,29 @@
+body {
+    color: #fff;
+    font-family: 'Exo 2', sans-serif;
+    font-weight: 300;
+    font-size: 25px;
+}
+
+.time {
+    color: #B5B5B5;
+}
+
+.message {
+    white-space: nowrap; /* Stay on one line */
+
+    overflow: hidden;
+    -webkit-animation: fadeOut 1.5s;
+    -webkit-animation-delay: 2s;
+    -webkit-animation-timing-function: ease-out;
+    -webkit-animation-fill-mode: forwards;
+
+    background: rgba(0, 0, 0, .8);
+    padding: 2px 5px 2px 5px;
+}
+
+@-webkit-keyframes fadeOut {
+    to {
+        opacity: 0;
+    }
+}
