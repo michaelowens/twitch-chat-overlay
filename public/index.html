@@ -47,9 +47,14 @@
       <button id="copylink" type="button" onclick="copyLink()">Copy</button>
     </div>
 
+    <iframe style="margin-top: 10px; width: 600px; height: 500px"></iframe>
+
     <script>
       const baseUrl = window.location.origin
       const linkEl = document.getElementById('linkout')
+      const iframeEl = document.querySelector('iframe')
+      let delayedUpdate
+      let messageInterval
 
       function updateLink() {
         const urlParams = new URLSearchParams()
@@ -68,6 +73,15 @@
             urlParams.set('emotes', false)
 
           url += '?' + urlParams
+
+          urlParams.set('preview', true)
+
+          let previewUrl = baseUrl + '/chat?' + urlParams
+          if (delayedUpdate) clearTimeout(delayedUpdate)
+          delayedUpdate = setTimeout(() => (iframeEl.src = previewUrl), 500)
+
+          if (messageInterval) clearInterval(messageInterval)
+          messageInterval = setInterval(previewMessage, 3000)
         }
 
         linkEl.value = url
@@ -76,6 +90,69 @@
       function copyLink() {
         linkEl.select()
         document.execCommand('Copy')
+      }
+
+      const previewMessages = [
+        {
+          user: {
+            color: '#4EEAFF',
+            'display-name': 'mylu__',
+            emotes: {
+              300502253: ['118-126'],
+            },
+            mod: true,
+          },
+          message:
+            "@CptnMelody let's play some other time, not during a rare Xikeon stream, it has been like 8 months since the last one ortoLaugh",
+        },
+        {
+          user: {
+            color: '#00AFA5',
+            'display-name': 'liveGin',
+          },
+          message:
+            'i started freestyling so i lost every game in a brazil fashion',
+          action: false,
+        },
+        {
+          user: {
+            color: '#00FF7F',
+            'display-name': 'Cwookie',
+            emotes: {
+              1860090: ['118-126'],
+            },
+            mod: true,
+          },
+          message: 'Aaaaah I refreshed and now I get another ad cpicsHalp',
+        },
+        {
+          user: {
+            color: '#FF085F',
+            'display-name': 'chibijuice_',
+            emotes: {
+              300502253: ['10-15'],
+            },
+            mod: true,
+          },
+          message: 'all is fine, it\'s called "testing" ortoLaugh',
+        },
+        {
+          user: {
+            color: '#33925D',
+            'display-name': 'Mattki',
+          },
+          message:
+            'worth it but might also be worth adding a bathroom level of reverb',
+        },
+      ]
+      function previewMessage() {
+        if (!iframeEl.src) return
+
+        const detail =
+          previewMessages[Math.floor(Math.random() * previewMessages.length)]
+
+        const event = new CustomEvent('message', { detail })
+        iframeEl.contentDocument.dispatchEvent(event)
       }
 
       updateLink()
