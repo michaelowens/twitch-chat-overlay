@@ -71,10 +71,6 @@ ul {
   -webkit-animation-timing-function: ease-in-out;
 }
 
-.animated {
-  -webkit-transition: bottom 0.9s;
-}
-
 @-webkit-keyframes fadeOutSlideUp {
   0% {
     opacity: 1;
