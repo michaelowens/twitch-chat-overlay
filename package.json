@@ -2,9 +2,9 @@
   "name": "twitch-chat-overlay",
   "version": "0.0.1",
   "description": "Twitch chat for your overlay",
-  "main": "app.coffee",
+  "main": "app.js",
   "scripts": {
-    "start": "./node_modules/coffee-script/bin/coffee app.coffee",
+    "start": "node app.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "Michael Owens",
@@ -13,6 +13,9 @@
     "coffee-script": "^1.9.3",
     "connect": "^3.4.0",
     "connect-assets": "^4.8.0",
-    "serve-static": "^1.10.0"
+    "fastify": "^3.13.0",
+    "middie": "^5.2.0",
+    "serve-static": "^1.10.0",
+    "tmi.js": "^1.7.5"
   }
 }
