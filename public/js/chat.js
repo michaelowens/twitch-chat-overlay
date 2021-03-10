@@ -11,6 +11,7 @@ export const config = {
     hosts: urlParams.get('hosts') || false,
   },
   maxmessages: urlParams.get('maxmsgs') || 5,
+  debug: urlParams.get('debug') || false,
 }
 
 function escapeHtml(str) {
@@ -27,7 +28,7 @@ export function createClient() {
 
   client = new tmi.Client({
     options: {
-      debug: true,
+      debug: !!config.debug,
     },
     connection: {
       random: 'chat',
