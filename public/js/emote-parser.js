@@ -8,20 +8,19 @@ export const config = {
   // bttvemotes: urlParams.get('bttvemotes') || false,
 }
 
-export function emoteParse(msg, emotes) {
+export function emoteParse(msg, unsafeMsg, emotes) {
   let msgEmotes
   if (emotes && config.emotes) {
     // Message had emotes from Twitch
     msgEmotes = Object.keys(emotes).map((id) => {
       const [start, end] = emotes[id][0].split('-').map((n) => parseInt(n))
       return {
-        code: msg.substring(start, end + 1),
+        code: unsafeMsg.substring(start, end + 1),
         url: `https://static-cdn.jtvnw.net/emoticons/v1/${id}/1.0`,
       }
     })
     msgEmotes = msgEmotes.concat(allEmotes)
   }
-  console.log(msgEmotes)
 
   return replaceEmotes(msg.split(' '), msgEmotes || allEmotes)
 }

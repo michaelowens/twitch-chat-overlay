@@ -13,6 +13,12 @@ export const config = {
   maxmessages: urlParams.get('maxmsgs') || 5,
 }
 
+function escapeHtml(str) {
+  const div = document.createElement('div')
+  div.appendChild(document.createTextNode(str))
+  return div.innerHTML
+}
+
 export let client
 export function createClient() {
   if (client) {
@@ -41,11 +47,10 @@ export function createClient() {
 
   client.addListener('chat', (channel, user, message) => {
     if (config.notify.chat) {
-      console.log(user, message)
       const event = new CustomEvent('message', {
         detail: {
           user: user,
-          message: emoteParse(message, user.emotes),
+          message: emoteParse(escapeHtml(message), message, user.emotes),
           action: false,
         },
       })
@@ -58,7 +63,7 @@ export function createClient() {
       const event = new CustomEvent('message', {
         detail: {
           user: user,
-          message: emoteParse(message),
+          message: emoteParse(escapeHtml(message), message),
           action: true,
         },
       })
