@@ -1,8 +1,4 @@
-let messageQueue = []
-
-document.addEventListener('message', (data) => {
-  messageQueue.push(data.detail)
-})
+document.addEventListener('message', (data) => appendMessage(data.detail))
 
 document.addEventListener('subscription', (data) => {
   console.log(data.user + ' just subscribed!')
@@ -24,11 +20,3 @@ function appendMessage(data) {
     <div class="msg">${data.message}</div>`
   document.querySelector('.messages').appendChild($row)
 }
-
-function messageLoop() {
-  if (messageQueue.length > 0) {
-    appendMessage(messageQueue.shift())
-  }
-}
-
-setInterval(messageLoop, 250)
