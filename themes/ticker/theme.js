@@ -1,28 +1,8 @@
-fetch('config.json')
-  .then((response) => response.json())
-  .then((config) => start(config))
+import { createClient } from '/js/chat.js'
 
-let messageQueue = []
+createClient()
 
-function start(config) {
-  const socket = io('ws://' + document.domain + ':' + (config.port || 1337), {
-    transports: ['websocket', 'polling'],
-  })
-  socket.on('message', (data) => messageQueue.push(data))
-  socket.on('subscription', (data) =>
-    console.log(data.user + ' just subscribed!')
-  )
-  socket.on('subanniversary', (data) => {
-    console.log(
-      data.user.username +
-        ' subbed for ' +
-        data.months +
-        ' month' +
-        (data.months !== 1 ? 's' : '') +
-        '!'
-    )
-  })
-}
+document.addEventListener('message', (data) => appendMessage(data.detail))
 
 function appendMessage(data) {
   const oldMessages = document.querySelector('.message')
@@ -38,15 +18,9 @@ function appendMessage(data) {
   $row.className = 'message'
   $row.innerHTML = `
     <span class="time">${h}:${m}</span>
-    <span class="user" style="color: ${data.user.color};">${data.user.username}</span>:
+    <span class="user" style="color: ${data.user.color};">${data.user['display-name']}</span>:
     <span class="msg">${data.message}</span>`
+
+  $row.addEventListener('animationend', () => $row.parentNode.removeChild($row))
   document.querySelector('.messages').appendChild($row)
 }
-
-function messageLoop() {
-  if (messageQueue.length > 0) {
-    appendMessage(messageQueue.shift())
-  }
-}
-
-setInterval(messageLoop, 1000)

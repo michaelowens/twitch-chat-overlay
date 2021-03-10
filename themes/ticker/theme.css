@@ -1,29 +1,40 @@
 body {
-    color: #fff;
-    font-family: 'Exo 2', sans-serif;
-    font-weight: 300;
-    font-size: 25px;
+  color: #fff;
+  font-family: 'Exo 2', sans-serif;
+  font-weight: 300;
+  font-size: 25px;
+  margin: 0;
+  padding: 0;
 }
 
 .time {
-    color: #B5B5B5;
+  color: #b5b5b5;
 }
 
 .message {
-    white-space: nowrap; /* Stay on one line */
+  white-space: nowrap; /* Stay on one line */
 
-    overflow: hidden;
-    -webkit-animation: fadeOut 1.5s;
-    -webkit-animation-delay: 2s;
-    -webkit-animation-timing-function: ease-out;
-    -webkit-animation-fill-mode: forwards;
+  overflow: hidden;
+  -webkit-animation: fadeOut 1.5s;
+  -webkit-animation-delay: 5s;
+  -webkit-animation-timing-function: ease-out;
+  -webkit-animation-fill-mode: forwards;
 
-    background: rgba(0, 0, 0, .8);
-    padding: 2px 5px 2px 5px;
+  background: rgba(0, 0, 0, 0.8);
+  padding: 2px 5px 2px 5px;
 }
 
 @-webkit-keyframes fadeOut {
-    to {
-        opacity: 0;
-    }
+  to {
+    opacity: 0;
+  }
+}
+
+.messages li .badges {
+  display: inline-block;
+  margin-right: -3px;
+}
+
+.messages li .badges img {
+  margin-right: 3px;
 }
