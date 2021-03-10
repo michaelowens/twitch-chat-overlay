@@ -10,12 +10,8 @@
   "author": "Michael Owens",
   "license": "ISC",
   "dependencies": {
-    "coffee-script": "^1.9.3",
-    "connect": "^3.4.0",
-    "connect-assets": "^4.8.0",
     "fastify": "^3.13.0",
     "middie": "^5.2.0",
-    "serve-static": "^1.10.0",
-    "tmi.js": "^1.7.5"
+    "serve-static": "^1.10.0"
   }
 }
