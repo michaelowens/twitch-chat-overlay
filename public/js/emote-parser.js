@@ -25,7 +25,7 @@ export function emoteParse(msg, unsafeMsg, emotes) {
   return replaceEmotes(msg.split(' '), msgEmotes || allEmotes)
 }
 
-function emoteLoad(roomId) {
+export function emoteLoad(roomId) {
   if (config.emotes) {
     // fetchEmotes(
     //   'https://api.twitchemotes.com/api/v4/channels/0',
@@ -91,5 +91,3 @@ function replaceEmotes(words, emotes) {
   const replacedWords = words.map((word) => emotes.reduce(reducer, word))
   return replacedWords.join(' ')
 }
-
-document.addEventListener('roomid', (data) => emoteLoad(data.detail))

@@ -1,4 +1,4 @@
-import { emoteParse } from './emote-parser.js'
+import { emoteParse, emoteLoad } from './emote-parser.js'
 
 const urlParams = new URLSearchParams(window.location.search)
 
@@ -39,12 +39,7 @@ export function createClient() {
 
   client.connect()
 
-  client.on('roomstate', (channel, state) => {
-    const event = new CustomEvent('roomid', {
-      detail: state['room-id'],
-    })
-    document.dispatchEvent(event)
-  })
+  client.on('roomstate', (_, state) => emoteLoad(state['room-id']))
 
   client.addListener('chat', (channel, user, message) => {
     if (config.notify.chat) {
