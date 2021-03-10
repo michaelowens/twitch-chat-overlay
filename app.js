@@ -27,7 +27,7 @@ async function routes() {
 async function start() {
   try {
     await routes()
-    await fastify.listen(process.env.PORT || 1337)
+    await fastify.listen(process.env.PORT || 1337, '0.0.0.0')
     const address = fastify.server.address()
     const port = typeof address === 'string' ? address : address?.port
     console.log(`Listening on http://${address.address}:${port}`)
