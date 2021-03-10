@@ -1,5 +1,5 @@
 const path = require('path')
-const fs = require('fs/promises')
+const { readFile } = require('fs/promises')
 const fastify = require('fastify')()
 const serveStatic = require('serve-static')
 
@@ -16,7 +16,7 @@ async function routes() {
         const theme = req.query.theme || 'dark'
         res.header('Content-Type', 'text/html')
         res.send(
-          await fs.readFile(
+          await readFile(
             path.join(process.cwd(), 'themes', theme, 'index.html')
           )
         )
