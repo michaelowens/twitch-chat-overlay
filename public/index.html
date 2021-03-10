@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <title>Twitch Chat Overlay</title>
+  </head>
+  <body>
+    <h1>Twitch Chat Overlay - Setup</h1>
+    <div>
+      Fill in the settings you want to use then copy the link generated into
+      your CLR browser.
+    </div>
+
+    <div style="margin-top: 10px">
+      Username:
+      <input
+        onkeyup="updateLink()"
+        id="username"
+        type="text"
+        autocomplete="off"
+      /><br /><br />
+
+      Overlay theme:
+      <select id="theme" onchange="updateLink()">
+        <option value="dark" selected>dark</option>
+        <option value="stack">stack</option>
+        <option value="ticker">ticker</option>
+      </select>
+      <br />
+
+      Show emotes:
+      <input onclick="updateLink()" type="radio" name="twitch_emotes" checked />
+      Yes
+      <input
+        id="twitch_no"
+        onclick="updateLink()"
+        type="radio"
+        name="twitch_emotes"
+      />
+      No
+      <br />
+    </div>
+
+    <div style="margin-top: 10px">
+      Link:
+      <input id="linkout" type="text" readonly size="65" />
+      <button id="copylink" type="button" onclick="copyLink()">Copy</button>
+    </div>
+
+    <script>
+      const baseUrl = window.location.origin
+      const linkEl = document.getElementById('linkout')
+
+      function updateLink() {
+        const urlParams = new URLSearchParams()
+        var url = baseUrl + '/chat'
+
+        var username = document.getElementById('username').value
+        if (username) {
+          urlParams.set('username', username)
+
+          // theme
+          var themeSel = document.getElementById('theme')
+          var theme = themeSel.options[themeSel.selectedIndex].text
+          if (theme !== 'dark') urlParams.set('theme', theme)
+
+          if (document.getElementById('twitch_no').checked)
+            urlParams.set('emotes', false)
+
+          url += '?' + urlParams
+        }
+
+        linkEl.value = url
+      }
+
+      function copyLink() {
+        linkEl.select()
+        document.execCommand('Copy')
+      }
+
+      updateLink()
+    </script>
+  </body>
+</html>

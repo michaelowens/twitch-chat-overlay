@@ -9,7 +9,7 @@ async function routes() {
   fastify
     .use('/themes', serveStatic(path.join(process.cwd(), 'themes')))
     .use(serveStatic(path.join(process.cwd(), 'public')))
-    .get('/*', async (req, res) => {
+    .get('/chat', async (req, res) => {
       if (!req.query.username) {
         return res.send('Username not given.\n')
       } else {
