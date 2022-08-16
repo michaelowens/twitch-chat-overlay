@@ -49,7 +49,11 @@
 
     <iframe style="margin-top: 10px; width: 600px; height: 500px"></iframe>
 
-    <script>
+    <script type="module">
+      import { emoteParse, emoteLoad } from './js/emote-parser.js'
+
+      emoteLoad('15206897')
+
       const baseUrl = window.location.origin
       const linkEl = document.getElementById('linkout')
       const iframeEl = document.querySelector('iframe')
@@ -86,11 +90,13 @@
 
         linkEl.value = url
       }
+      window.updateLink = updateLink
 
       function copyLink() {
         linkEl.select()
         document.execCommand('Copy')
       }
+      window.copyLink = copyLink
 
       const previewMessages = [
         {
@@ -119,7 +125,7 @@
             color: '#00FF7F',
             'display-name': 'Cwookie',
             emotes: {
-              1860090: ['118-126'],
+              1860090: ['44-52'],
             },
             mod: true,
           },
@@ -130,7 +136,7 @@
             color: '#FF085F',
             'display-name': 'chibijuice_',
             emotes: {
-              300502253: ['10-15'],
+              300502253: ['35-43'],
             },
             mod: true,
           },
@@ -144,12 +150,25 @@
           message:
             'worth it but might also be worth adding a bathroom level of reverb',
         },
+        {
+          user: {
+            color: '#ff69b4',
+            'display-name': 'Xikeon',
+          },
+          message: 'vibin AlienDance RainTime',
+        },
       ]
       function previewMessage() {
         if (!iframeEl.src) return
 
-        const detail =
+        let detail =
           previewMessages[Math.floor(Math.random() * previewMessages.length)]
+
+        detail.message = emoteParse(
+          detail.message,
+          detail.message,
+          detail.user.emotes
+        )
 
         const event = new CustomEvent('message', { detail })
         iframeEl.contentDocument.dispatchEvent(event)
