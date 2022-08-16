@@ -44,6 +44,8 @@ export function emoteLoad(roomId) {
       'https://api.betterttv.net/3/cached/users/twitch/' + roomId,
       parseBTTVEmotes
     )
+    fetchEmotes('https://api.7tv.app/v2/emotes/global', parse7TVEmotes)
+    fetchEmotes(`https://api.7tv.app/v2/users/${roomId}/emotes`, parse7TVEmotes)
   }
 }
 
@@ -69,6 +71,16 @@ function parseBTTVEmotes(data) {
     allEmotes.push({
       code: emote.code,
       url: `https://cdn.betterttv.net/emote/${emote.id}/1x`,
+    })
+  })
+}
+
+function parse7TVEmotes(data) {
+  // add 7tv emotes
+  data.forEach((emote) => {
+    allEmotes.push({
+      code: emote.name,
+      url: `https://cdn.7tv.app/emote/${emote.id}/1x`,
     })
   })
 }
