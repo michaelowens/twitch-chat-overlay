@@ -29,14 +29,9 @@
       <br />
 
       Show emotes:
-      <input onclick="updateLink()" type="radio" name="twitch_emotes" checked />
+      <input onclick="updateLink()" type="radio" name="emotes" value="1" />
       Yes
-      <input
-        id="twitch_no"
-        onclick="updateLink()"
-        type="radio"
-        name="twitch_emotes"
-      />
+      <input onclick="updateLink()" type="radio" name="emotes" value="0" />
       No
       <br />
     </div>
@@ -60,21 +55,41 @@
       let delayedUpdate
       let messageInterval
 
+      document.getElementById('username').value =
+        localStorage.getItem('username') || ''
+
+      document.getElementById('theme').options.selectedIndex =
+        localStorage.getItem('theme') || 0
+
+      let storedEmotesValue = localStorage.getItem('emotes') || '1'
+      document.querySelector(
+        `[name="emotes"][value="${storedEmotesValue}"]`
+      ).checked = true
+
       function updateLink() {
         const urlParams = new URLSearchParams()
         var url = baseUrl + '/chat'
 
         var username = document.getElementById('username').value
+
+        localStorage.setItem('username', username)
+
         if (username) {
           urlParams.set('username', username)
 
           // theme
           var themeSel = document.getElementById('theme')
           var theme = themeSel.options[themeSel.selectedIndex].text
+          localStorage.setItem('theme', themeSel.selectedIndex)
+
           if (theme !== 'dark') urlParams.set('theme', theme)
 
-          if (document.getElementById('twitch_no').checked)
-            urlParams.set('emotes', false)
+          let emoteField = document.querySelector('[name="emotes"]:checked')
+          if (emoteField) {
+            localStorage.setItem('emotes', emoteField.value)
+
+            if (emoteField.value === '0') urlParams.set('emotes', false)
+          }
 
           url += '?' + urlParams
 
